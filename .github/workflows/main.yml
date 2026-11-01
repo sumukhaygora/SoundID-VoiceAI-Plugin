@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Configure CMake
-        run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+        run: run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 
       - name: Build Plugin & Standalone
         run: cmake --build build --config Release --parallel 4
@@ -37,7 +37,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Configure CMake (Universal Binary arm64 + x86_64)
-        run: cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
+        run:  cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
 
       - name: Build Plugin & Standalone
         run: cmake --build build --config Release --parallel 4
