@@ -1,0 +1,52 @@
+name: Build VST3 & Standalone Artifacts
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    name: Windows (VST3 & Standalone)
+    runs-on: windows-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Configure CMake
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build Plugin & Standalone
+        run: cmake --build build --config Release --parallel 4
+
+      - name: Upload Windows VST3 & Standalone Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: SoundID-VoiceAI-Windows-VST3-Standalone
+          path: |
+            build/SoundIDVoiceAI_artefacts/Release/VST3/SoundID VoiceAI.vst3
+            build/SoundIDVoiceAI_artefacts/Release/Standalone/SoundID VoiceAI.exe
+
+  build-macos:
+    name: macOS (VST3, AU & Standalone)
+    runs-on: macos-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Configure CMake (Universal Binary arm64 + x86_64)
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
+
+      - name: Build Plugin & Standalone
+        run: cmake --build build --config Release --parallel 4
+
+      - name: Upload macOS VST3, AU & Standalone Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: SoundID-VoiceAI-macOS-VST3-AU-Standalone
+          path: |
+            build/SoundIDVoiceAI_artefacts/Release/VST3/SoundID VoiceAI.vst3
+            build/SoundIDVoiceAI_artefacts/Release/AU/SoundID VoiceAI.component
+            build/SoundIDVoiceAI_artefacts/Release/Standalone/SoundID VoiceAI.app
