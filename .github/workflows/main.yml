@@ -15,8 +15,11 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Inspect Workspace Structure
+        run: dir /s
+
       - name: Configure CMake
-        run:  cmake -S SoundID-VoiceAI-Plugin -B build -DCMAKE_BUILD_TYPE=Release
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 
       - name: Build Plugin & Standalone
         run: cmake --build build --config Release --parallel 4
@@ -36,8 +39,12 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Inspect Workspace Structure
+        run: find . -maxdepth 3
+
       - name: Configure CMake (Universal Binary arm64 + x86_64)
-        run:  cmake -S SoundID-VoiceAI-Plugin -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
+
       - name: Build Plugin & Standalone
         run: cmake --build build --config Release --parallel 4
 
